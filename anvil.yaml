@@ -1,10 +1,51 @@
 allow_embedding: false
 package_name: Material_Design_1
+db_schema:
+  users:
+    client: none
+    server: full
+    columns:
+    - name: email
+      admin_ui: {order: 0, width: 200}
+      type: string
+    - name: enabled
+      admin_ui: {order: 1, width: 200}
+      type: bool
+    - name: last_login
+      admin_ui: {order: 2, width: 200}
+      type: datetime
+    - name: password_hash
+      admin_ui: {order: 3, width: 200}
+      type: string
+    - name: n_password_failures
+      admin_ui: {order: 4, width: 200}
+      type: number
+    - name: confirmed_email
+      admin_ui: {order: 5, width: 200}
+      type: bool
+    - name: remembered_logins
+      admin_ui: {order: 6, width: 200}
+      type: simpleObject
+    title: Users
 name: Material Design 1
 startup_form: Form1
-runtime_options: {version: 2, client_version: '3', server_version: python3-sandbox,
-  server_spec: null}
+runtime_options:
+  version: 2
+  client_version: '3'
+  server_version: python3-sandbox
+  server_spec: {base: python310-minimal}
 services:
 - source: /runtime/services/tables.yml
   client_config: {}
   server_config: {}
+- source: /runtime/services/anvil/email.yml
+  client_config: {}
+  server_config: {custom_smtp: false}
+- source: /runtime/services/google.yml
+  client_config: {}
+  server_config: {enc_delegation_refresh_token: mB8nPSN4X2bOMV6dytQc9SeIQ3V1Q8ABpzs4Hgki9uZfY5ym7jkFZxLlKM/E+/iNjvijwXKxI94bVV6riMMCKSPESizYd4QkmcwqOo5ycRFXcV7lRF+xLbNZ4vTmi3R5gCX32J4APEpuuhUHJ7rUMELS1rMSKMNuVxmQpFqjr8/lnMXWsYCLICDhp9/lTyJMPv6ikzN9cgBD6WJA3j9ErijUVrlQAJGOEIu1quKYVLxbI8efiR5IaMAReGm4qLUL9zG5xCzrXcQPQ1OiboJpZ4HSlPjNy1A1Q8B5wtmUv/aJBzrOAKtWp2xga2YJRA==}
+- source: /runtime/services/anvil/users.yml
+  client_config: {require_secure_passwords: true, use_token: true, use_email: true,
+    allow_remember_me: true, allow_signup: false, enable_automatically: true, confirm_email: true,
+    remember_me_days: 1, use_google: true}
+  server_config: {user_table: users, email_from_address: accounts@cusmato.com}
